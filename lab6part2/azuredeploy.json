@@ -1,0 +1,63 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "aksClusterName": {
+            "type": "string",
+            "metadata": {
+                "description": "AKS Cluster name"
+            },
+            "minLength":1,
+            "maxLength":63
+        },
+        "location": {
+            "type": "string",
+            "metadata": {
+                "description": "Location of the resource"
+            }
+        }
+    },
+    "functions": [],
+    "variables": {},
+    "resources": [{
+        "name": "[parameters('aksClusterName')]",
+        "type": "Microsoft.ContainerService/managedClusters",
+        "apiVersion": "2023-01-01",
+        "location": "[parameters('location')]",
+        "properties": {
+            "kubernetesVersion": "1.15.7",
+            "dnsPrefix": "dnsprefix",
+            "agentPoolProfiles": [
+                {
+                    "name": "agentpool",
+                    "count": 2,
+                    "vmSize": "Standard_A1",
+                    "osType": "Linux",
+                    "storageProfile": "ManagedDisks"
+                },
+                {
+                    "name": "agentpool2",
+                    "count": 3,
+                    "vmSize": "Standard_A1",
+                    "osType": "Linux"
+
+                }
+            ],
+            "linuxProfile": {
+                "adminUsername": "adminUserName",
+                "ssh": {
+                    "publicKeys": [
+                        {
+                            "keyData": "keyData"
+                        }
+                    ]
+                }
+            },
+            "servicePrincipalProfile": {
+                "clientId": "servicePrincipalAppId",
+                "secret": "servicePrincipalAppPassword"
+            }
+        }
+    }],
+    "outputs": {}
+}
